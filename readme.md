@@ -34,7 +34,66 @@ const endsWith = 'World';
 const logicGroup = {
   type: 'group',
   rules: [
-    // Define your rules here
+    // Relational operators
+    {
+      type: 'expr',
+      left: 'age',
+      operator: 'GTE',
+      right: minAge
+    },
+    {
+      type: 'logic',
+      operator: 'AND'
+    },
+    {
+      type: 'expr',
+      left: 'city',
+      operator: 'EQ',
+      right: targetCity
+    },
+    {
+      type: 'logic',
+      operator: 'AND'
+    },
+    {
+      type: 'expr',
+      left: 'name',
+      operator: 'STARTSWITH',
+      right: startsWith
+    },
+    {
+      type: 'logic',
+      operator: 'AND'
+    },
+    {
+      type: 'expr',
+      left: 'hobbies',
+      operator: 'INCLUDES',
+      right: hobby
+    },
+    {
+      type: 'logic',
+      operator: 'AND'
+    },
+    {
+      type: 'expr',
+      left: 'text',
+      operator: 'ENDSWITH',
+      right: endsWith
+    },
+    {
+      type: 'logic',
+      operator: 'AND'
+    },
+    {
+      type: 'expr',
+      left: 'age',
+      operator: 'BETWEEN',
+      right: {
+        start: minAge,
+        end: maxAge
+      }
+    }
   ]
 };
 
