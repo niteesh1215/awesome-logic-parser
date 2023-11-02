@@ -3,13 +3,13 @@ The *Awesome Logic Parser* is a JavaScript library for evaluating logic rules ba
 
 ## Installation
 You can install the Logic Parser library using npm:
-```
-npm install logic-parser
+```bash
+npm install awesome-logic-parser
 ```
 
 ## Usage
 
-```
+```js
 // Import the LogicParser library
 const { LogicParser } = require('logic-parser');
 
