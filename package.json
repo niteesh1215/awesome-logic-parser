@@ -1,5 +1,5 @@
 {
-  "name": "logic-parser",
+  "name": "awesome-logic-parser",
   "version": "1.0.0",
   "description": "Parses logic specified in json format",
   "main": "./dist/index.js",
@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "run":"nodemon ./src/index.ts",
     "build": "rm -rf ./dist && tsup",
     "test": "jest"
   },
@@ -17,6 +18,10 @@
     "json-logic-parser"
   ],
   "author": "Niteesh Mahato",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niteesh1215/logic-parser.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.7",
