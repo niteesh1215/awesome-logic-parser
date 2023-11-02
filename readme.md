@@ -1,5 +1,5 @@
 # Awesome Logic Parser
-The *Awesome Logic Parser* is a JavaScript library for evaluating logic rules based on a set of rules and a data context. This library provides the ability to define complex rules and evaluate them against data.
+The **Awesome Logic Parser** is a JavaScript library for evaluating logic rules based on a set of rules and a data context. This library provides the ability to define complex rules and evaluate them against data.
 
 ## Installation
 You can install the Logic Parser library using npm:
