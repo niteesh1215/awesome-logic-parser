@@ -1,12 +1,13 @@
 import { Element, LogicalOperator, RelationalOperator } from '../enums'
 import { BetweenExpression, EndsWithExpression, EqualExpression, type Expression, GreaterThanExpression, GreaterThanOrEqualExpression, IncludesExpression, LessThanExpression, LessThanOrEqualExpression, NotEqualExpression, NotIncludesExpression, StartsWithExpression } from '../expressions'
 import { type IBetween, type IExpression, type ILogic, type ILogicGroup, type ILogicParserOptions } from '../interfaces/common'
+import Parser from './parser'
 
 /**
      * Parses rule expressions based on a set of rules and data context.
      * @throws Error if an error occurs during parsing.
      */
-export class LogicParser {
+export class LogicParser extends Parser {
   private readonly options: ILogicParserOptions
 
   /**
@@ -14,18 +15,19 @@ export class LogicParser {
          * @param options - Parsing options for the rule parser.
          */
   constructor (options?: ILogicParserOptions) {
+    super()
     this.options = options ?? {
       resultWhenEmpty: false,
       returnFalseWhenError: false
     }
   }
 
-  evaluate (parsable: ILogicGroup | IExpression, data: object): boolean {
+  parse<T = boolean>(parsable: ILogicGroup | IExpression, data: object): T {
     return (parsable.type === Element.GROUP)
-      ? this.evaluateGroup(parsable, data)
+      ? this.parseGroup(parsable, data) as T
       : (parsable.type === Element.EXPRESSION)
-          ? this.evaluateExpression(parsable, data)
-          : false
+          ? this.parseExpression(parsable, data) as T
+          : false as T
   }
 
   /**
@@ -34,26 +36,26 @@ export class LogicParser {
          * @param data - The data object to use as context.
          * @returns True if the rule group is satisfied, otherwise false.
          */
-  private evaluateGroup (ruleGroup: ILogicGroup, data: object): boolean {
+  private parseGroup (ruleGroup: ILogicGroup, data: object): boolean {
     const { rules } = ruleGroup
 
     if (!rules?.length) return this.options.resultWhenEmpty
     if (rules[0].type === Element.LOGIC) throw new Error('First rule cannot be a ILogic operator')
 
-    let result = this.evaluate(rules[0], data)
+    let result = this.parse(rules[0], data)
 
     for (let i = 1; i < rules.length; i += 2) {
       const logic = rules[i] as ILogic
       const rule = rules[i + 1] as IExpression | ILogicGroup
       result = (logic.operator === LogicalOperator.AND)
-        ? result && this.evaluate(rule, data)
-        : result || this.evaluate(rule, data)
+        ? result && this.parse(rule, data)
+        : result || this.parse(rule, data)
     }
 
     return result
   }
 
-  private evaluateExpression (expr: IExpression, data: object): boolean {
+  private parseExpression (expr: IExpression, data: object): boolean {
     try {
       return this.getExpression(expr).parse(data)
     } catch (e) {
