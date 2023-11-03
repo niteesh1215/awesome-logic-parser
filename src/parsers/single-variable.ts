@@ -21,8 +21,7 @@ export class SingleVariableParser extends Parser {
 
     const [key, pipe] = parsable.split('|').map(x => x.trim())
 
-    const func = new Function('data', `return data.${key}`)
-    const value = func(data)
+    const value = this.extractValueFromKey(key, data)
 
     return pipe ? this.applyPipe(value, pipe) : value
   }
@@ -30,15 +29,53 @@ export class SingleVariableParser extends Parser {
   private applyPipe (value: string, pipe: string): any {
     const [name, ...formatStrArr] = pipe.split(':').map(x => x.trim())
     const formatStr = formatStrArr.join(':')
-    console.log(name, formatStr)
-    const pipeInstance = this.getPipeClass(name)
+    const pipeInstance = this.getPipe(name)
     return pipeInstance.transform(value, formatStr)
   }
 
-  private getPipeClass (name: string): Pipe {
+  private getPipe (name: string): Pipe {
     switch (name) {
       case 'toDate': return new ToDatePipe()
       default: throw new Error(`Pipe ${name} not found`)
     }
+  }
+
+  /**
+ * Extracts a value from an object using a key string.
+ * @param key - The key string to specify the path to the value in the object.
+ * @param obj - The object from which to extract the value.
+ * @returns The extracted value or undefined if not found.
+ */
+  private extractValueFromKey (key: string, obj: any): any {
+    const keys = key.split('.') // Split the key by dots
+    let value = obj
+
+    for (const k of keys) {
+      if (k === '$') {
+        // If the key part is "$," treat it as an array index
+        if (Array.isArray(value)) {
+          // Flatten the array of objects into a single object
+          const tempObject = {}
+          value.forEach((e) => {
+            if (typeof e === 'object') {
+              Object.assign(tempObject, e)
+            }
+          })
+          value = tempObject
+        }
+      } else if (Array.isArray(value)) {
+        // If the key part is not "$" but the value is an array, return the array
+        return value
+      } else {
+        value = value[k] // Navigate deeper into the object
+      }
+
+      if (value === undefined) {
+        // Handle undefined values
+        return undefined
+      }
+    }
+
+    return value
   }
 }
