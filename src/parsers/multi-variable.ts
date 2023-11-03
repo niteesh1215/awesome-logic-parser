@@ -12,7 +12,7 @@ export class MultipleVariableParser extends Parser {
          * @returns The parsed expression with variables replaced.
          */
   parse<T = string>(parsable: string, data: object): T {
-    const singleVariableParser = new SingleVariableParser()
+    const singleVariableParser = new SingleVariableParser({ returnFirstValueForArraySubField: true })
     parsable = parsable.replace(/\$\{(.*?)\}/g, (match, placeholder) => {
       const value = singleVariableParser.parse(placeholder, data)
       return String(value)

@@ -9,6 +9,18 @@ import Parser from './parser'
  * Parses a single variable from a string expression using data as context.
  */
 export class SingleVariableParser extends Parser {
+  private readonly options: { returnFirstValueForArraySubField: boolean }
+
+  /**
+         * Creates a new instance of the SingleVariableParser class.
+         * @param options - The options for the parser.
+         */
+
+  constructor (options?: { returnFirstValueForArraySubField: boolean }) {
+    super()
+    this.options = options ?? { returnFirstValueForArraySubField: false }
+  }
+
   /**
          * Parses the specified parsable expression and returns the result.
          * @param parsable - The expression to parse.
@@ -21,7 +33,11 @@ export class SingleVariableParser extends Parser {
 
     const [key, pipe] = parsable.split('|').map(x => x.trim())
 
-    const value = this.extractValueFromKey(key, data)
+    const result = this.extractValueFromKey(key, data)
+
+    const value = this.options.returnFirstValueForArraySubField && Array.isArray(result)
+      ? result[0]
+      : result
 
     return pipe ? this.applyPipe(value, pipe) : value
   }
@@ -55,10 +71,15 @@ export class SingleVariableParser extends Parser {
         // If the key part is "$," treat it as an array index
         if (Array.isArray(value)) {
           // Flatten the array of objects into a single object
-          const tempObject = {}
+          const tempObject: Record<string, any> = {}
           value.forEach((e) => {
             if (typeof e === 'object') {
-              Object.assign(tempObject, e)
+              Object.keys(e).forEach((k) => {
+                if (tempObject[k] === undefined) {
+                  tempObject[k] = []
+                }
+                tempObject[k].push(e[k])
+              })
             }
           })
           value = tempObject

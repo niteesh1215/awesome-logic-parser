@@ -1,4 +1,4 @@
-import { MultipleVariableParser } from '..'
+import { MultipleVariableParser, RelationalOperator } from '..'
 import { type IBetween } from '../interfaces/common'
 import { Expression } from './expression'
 
@@ -6,6 +6,10 @@ import { Expression } from './expression'
      * Represents a between expression.
      */
 export class BetweenExpression extends Expression<string, IBetween> {
+  constructor (left: string, right: IBetween) {
+    super(left, RelationalOperator.BETWEEN, right)
+  }
+
   /**
            * Parses the between expression using the provided data object.
            * @param data - The data object to use as context.
@@ -15,14 +19,22 @@ export class BetweenExpression extends Expression<string, IBetween> {
     const left = this.parseLeft(data)
     const multiParser = new MultipleVariableParser()
     const between: IBetween = this.right as unknown as IBetween
-    const start = multiParser.parse(between.start, data)
-    const end = multiParser.parse(between.end, data)
+    const start = multiParser.parse(String(between.start), data)
+    const end = multiParser.parse(String(between.end), data)
 
+    return this.validate(left, start, end)
+  }
+
+  private validate (left: any, start: any, end: any): boolean {
+    if (Array.isArray(left)) {
+      return left.some((e) => {
+        return this.validate(e, start, end)
+      })
+    }
     switch (typeof left) {
       case 'number':
         return left >= Number(start) && left <= Number(end)
-      default:
-        return false
     }
+    return false
   }
 }

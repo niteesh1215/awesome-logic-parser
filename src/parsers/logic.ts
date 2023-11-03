@@ -79,27 +79,27 @@ export class LogicParser extends Parser {
     const { operator, left, right } = exprData
     switch (operator) {
       case RelationalOperator.EQ:
-        return new EqualExpression(left, operator, String(right))
+        return new EqualExpression(left, String(right))
       case RelationalOperator.NEQ:
-        return new NotEqualExpression(left, operator, String(right))
+        return new NotEqualExpression(left, String(right))
       case RelationalOperator.GT:
-        return new GreaterThanExpression(left, operator, String(right))
+        return new GreaterThanExpression(left, String(right))
       case RelationalOperator.GTE:
-        return new GreaterThanOrEqualExpression(left, operator, String(right))
+        return new GreaterThanOrEqualExpression(left, String(right))
       case RelationalOperator.LT:
-        return new LessThanExpression(left, operator, String(right))
+        return new LessThanExpression(left, String(right))
       case RelationalOperator.LTE:
-        return new LessThanOrEqualExpression(left, operator, String(right))
+        return new LessThanOrEqualExpression(left, String(right))
       case RelationalOperator.STARTSWITH:
-        return new StartsWithExpression(left, operator, String(right))
+        return new StartsWithExpression(left, String(right))
       case RelationalOperator.ENDSWITH:
-        return new EndsWithExpression(left, operator, String(right))
+        return new EndsWithExpression(left, String(right))
       case RelationalOperator.INCLUDES:
-        return new IncludesExpression(left, operator, String(right))
+        return new IncludesExpression(left, String(right))
       case RelationalOperator.NOT_INCLUDES:
-        return new NotIncludesExpression(left, operator, String(right))
+        return new NotIncludesExpression(left, String(right))
       case RelationalOperator.BETWEEN:
-        return new BetweenExpression(left, operator, right as unknown as IBetween)
+        return new BetweenExpression(left, right as unknown as IBetween)
       default:
         throw new Error(`RelationalOperator ${operator as string} not supported`)
     }

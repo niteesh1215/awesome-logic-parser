@@ -11,6 +11,8 @@ export default class ToDatePipe extends Pipe {
    * @returns {Date}
    */
   transform (value: string, formatStr: string): Date {
+    formatStr = formatStr.trim()
+    if (formatStr.startsWith('\'') && formatStr.endsWith('\'')) formatStr = formatStr.slice(1, -1)
     switch (formatStr) {
       case 'iso': return parseISO(value)
       default: return parse(value, formatStr, new Date())
