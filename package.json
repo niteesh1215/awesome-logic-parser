@@ -1,6 +1,6 @@
 {
   "name": "awesome-logic-parser",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Parses logic specified in json format",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
