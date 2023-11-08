@@ -31,7 +31,7 @@ export class SingleVariableParser extends Parser {
     parsable = parsable.trim()
     parsable = parsable.replace('${', '').replace('}', '')
 
-    const [key, pipe] = parsable.split('|').map(x => x.trim())
+    const [key, ...pipes] = parsable.split('|').map(x => x.trim())
 
     const result = this.extractValueFromKey(key, data)
 
@@ -39,11 +39,12 @@ export class SingleVariableParser extends Parser {
       ? result[0]
       : result
 
-    return pipe ? this.applyPipe(value, pipe) : value
+    return pipes.reduce((acc, pipe) => this.applyPipe(acc, pipe), value)
   }
 
   private applyPipe (value: string, pipe: string): any {
-    const [name, ...formatStrArr] = pipe.split(':').map(x => x.trim())
+    pipe = pipe.trim()
+    const [name, ...formatStrArr] = pipe.split(':')
     const formatStr = formatStrArr.join(':')
     const pipeInstance = this.getPipe(name)
     return pipeInstance.transform(value, formatStr)
