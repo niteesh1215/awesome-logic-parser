@@ -1,5 +1,5 @@
 import { RelationalOperator } from '..'
-import { type IBetween } from '../interfaces/common'
+import { type IBetween } from '../interfaces/logic-parser'
 import { Expression } from './expression'
 
 /**

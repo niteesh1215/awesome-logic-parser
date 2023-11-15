@@ -1,3 +1,4 @@
+import { type VarPipes } from '../interfaces/common'
 import { type IParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
 import { SingleVariableParser } from './single-variable'
@@ -26,5 +27,17 @@ export class MultipleVariableParser extends Parser {
     })
 
     return parsable as T
+  }
+
+  getVariablesAndPipes (parsable: string): VarPipes[] {
+    const variables: VarPipes[] = []
+
+    const iterator = parsable.matchAll(this.options.regex as RegExp)
+    for (const match of iterator) {
+      const value = this.singleVariableParser.getVariableAndPipes(match[1])
+      variables.push(value)
+    }
+
+    return variables
   }
 }

@@ -1,5 +1,5 @@
 import { Element, LogicalOperator, RelationalOperator } from './enums'
-import { type ILogicGroup } from './interfaces/common'
+import { type ILogicGroup } from './interfaces/logic-parser'
 import { LogicParser } from './parsers/logic'
 import { SingleVariableParser } from './parsers/single-variable'
 import { MultipleVariableParser } from './parsers/multi-variable'
