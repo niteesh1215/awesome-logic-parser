@@ -19,8 +19,8 @@ export class BetweenExpression extends Expression<string, IBetween> {
     const left = this.parseLeft(data)
 
     const between: IBetween = this.right as unknown as IBetween
-    const start = this.multipleVariableParser.parse(String(between.start), data)
-    const end = this.multipleVariableParser.parse(String(between.end), data)
+    const start = this.templateParser.parse(String(between.start), data)
+    const end = this.templateParser.parse(String(between.end), data)
 
     return this.validate(left, start, end)
   }

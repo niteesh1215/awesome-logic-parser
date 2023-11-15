@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-implied-eval */
 
 import { type Variable } from '../interfaces/common'
-import { type ISingleVariableParserOptions } from '../interfaces/parser-options'
+import { type IVariableParserOptions } from '../interfaces/parser-options'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
 import Parser from './parser'
@@ -10,7 +10,7 @@ import Parser from './parser'
 /**
  * Parses a single variable from a string expression using data as context.
  */
-export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
+export class VariableParser extends Parser<IVariableParserOptions> {
   /**
          * Parses the specified parsable expression and returns the result.
          * @param parsable - The expression to parse.
@@ -18,18 +18,13 @@ export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
          * @returns The parsed value.
          */
   parse<T = any>(parsable: string, data: object): T {
-    parsable = parsable.trim()
-    parsable = parsable.replace('{', '').replace('}', '')
-
-    const [key, ...pipes] = parsable.split('|').map(x => x.trim())
-
-    const result = this.extractValueFromKey(key, data)
-
+    const variable = this.getVariable(parsable)
+    const result = this.extractValueFromKey(variable.key, data)
     const value = this.options.returnFirstValueForArraySubField && Array.isArray(result)
       ? result[0]
       : result
 
-    return pipes.reduce((acc, pipe) => this.applyPipe(acc, pipe), value)
+    return variable.pipes.reduce((acc, pipe) => this.applyPipe(acc, pipe), value)
   }
 
   private applyPipe (value: string, pipe: string): any {
@@ -93,12 +88,27 @@ export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
 
   getVariable (parsable: string): Variable {
     parsable = parsable.trim()
-    parsable = parsable.replace('{', '').replace('}', '')
 
-    const parts = parsable.split('|').map(x => x.trim())
-    return {
-      name: parts[0],
-      pipes: parts.slice(1)
+    const extract = (str: string): Variable => {
+      const parts = str.split('|').map(x => x.trim())
+      return {
+        key: parts[0],
+        pipes: parts.slice(1)
+      }
     }
+
+    const iterator = parsable.matchAll(this.options.regex as RegExp)
+
+    const match1 = iterator.next()
+    if (match1.done) {
+      return extract(parsable)
+    }
+
+    const match2 = iterator.next()
+    if (!match2.done) {
+      throw new Error(`Multiple variables found in ${parsable}`)
+    }
+
+    return extract(match1.value[1])
   }
 }

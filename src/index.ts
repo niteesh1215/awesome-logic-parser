@@ -1,8 +1,8 @@
 import { Element, LogicalOperator, RelationalOperator } from './enums'
 import { type ILogicGroup } from './interfaces/logic-parser'
 import { LogicParser } from './parsers/logic'
-import { SingleVariableParser } from './parsers/single-variable'
-import { MultipleVariableParser } from './parsers/multi-variable'
+import { VariableParser } from './parsers/variable'
+import { TemplateParser } from './parsers/template'
 
 export {
   Element,
@@ -10,6 +10,6 @@ export {
   RelationalOperator,
   type ILogicGroup,
   LogicParser,
-  SingleVariableParser,
-  MultipleVariableParser
+  VariableParser,
+  TemplateParser
 }

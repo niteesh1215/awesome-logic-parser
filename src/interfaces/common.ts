@@ -1,4 +1,4 @@
 export interface Variable {
-  name: string
+  key: string
   pipes: string[]
 }

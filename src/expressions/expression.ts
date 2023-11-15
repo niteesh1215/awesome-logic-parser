@@ -1,6 +1,6 @@
-import { SingleVariableParser } from '../parsers/single-variable'
+import { VariableParser } from '../parsers/variable'
 import { type RelationalOperator } from '../enums'
-import { MultipleVariableParser } from '../parsers/multi-variable'
+import { TemplateParser } from '../parsers/template'
 
 /**
      * Abstract base class for rule expressions.
@@ -8,8 +8,8 @@ import { MultipleVariableParser } from '../parsers/multi-variable'
      * @template U - Type of the right-hand side of the expression.
      */
 export abstract class Expression<T = string, U = any> {
-  public singleVariableParser: SingleVariableParser = new SingleVariableParser()
-  public multipleVariableParser: MultipleVariableParser = new MultipleVariableParser()
+  public variableParser: VariableParser = new VariableParser()
+  public templateParser: TemplateParser = new TemplateParser()
 
   public readonly left: T
   public readonly operator: RelationalOperator
@@ -36,11 +36,11 @@ export abstract class Expression<T = string, U = any> {
 
   protected parseLeft (data: object): any {
     if (typeof this.left !== 'string') throw new Error('Left side of expression must be a string')
-    return this.singleVariableParser.parse(this.left, data)
+    return this.variableParser.parse(this.left, data)
   }
 
   protected parseRight (data: object): any {
     if (typeof this.right !== 'string') throw new Error('Right side of expression must be a string')
-    return this.multipleVariableParser.parse(this.right as string, data)
+    return this.templateParser.parse(this.right as string, data)
   }
 }

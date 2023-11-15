@@ -14,15 +14,15 @@ import { StartsWithExpression } from '../expressions/starts-with'
 import { type IBetween, type IExpression, type ILogic, type ILogicGroup } from '../interfaces/logic-parser'
 import { type ILogicParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
-import { MultipleVariableParser, SingleVariableParser } from '..'
+import { TemplateParser, VariableParser } from '..'
 
 /**
      * Parses rule expressions based on a set of rules and data context.
      * @throws Error if an error occurs during parsing.
      */
 export class LogicParser extends Parser<ILogicParserOptions> {
-  private readonly singleVariableParser: SingleVariableParser
-  private readonly multipleVariableParser: MultipleVariableParser
+  private readonly variableParser: VariableParser
+  private readonly templateParser: TemplateParser
 
   constructor (options?: Partial<ILogicParserOptions>) {
     options = Object.assign({
@@ -31,8 +31,8 @@ export class LogicParser extends Parser<ILogicParserOptions> {
     }, options ?? {})
 
     super(options as ILogicParserOptions)
-    this.singleVariableParser = new SingleVariableParser(this.options)
-    this.multipleVariableParser = new MultipleVariableParser(this.options)
+    this.variableParser = new VariableParser(this.options)
+    this.templateParser = new TemplateParser(this.options)
   }
 
   /**
@@ -79,8 +79,8 @@ export class LogicParser extends Parser<ILogicParserOptions> {
     try {
       const expression = this.getExpression(expr)
 
-      expression.singleVariableParser = this.singleVariableParser
-      expression.multipleVariableParser = this.multipleVariableParser
+      expression.variableParser = this.variableParser
+      expression.templateParser = this.templateParser
 
       return expression.parse(data)
     } catch (e) {

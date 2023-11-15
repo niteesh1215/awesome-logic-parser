@@ -15,8 +15,8 @@ export interface ILogicParserOptions extends IParserOptions {
 }
 
 /**
-     * Options for the SingleVariableParser class.
+     * Options for the VariableParser class.
      */
-export interface ISingleVariableParserOptions extends IParserOptions {
+export interface IVariableParserOptions extends IParserOptions {
   returnFirstValueForArraySubField?: boolean
 }

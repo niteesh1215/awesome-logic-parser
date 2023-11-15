@@ -1,17 +1,17 @@
 import { type Variable } from '../interfaces/common'
 import { type IParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
-import { SingleVariableParser } from './single-variable'
+import { VariableParser } from './variable'
 
 /**
-     * Parses a string expression containing multiple variables using data as context.
+     * Parses template string using data as context.
      */
-export class MultipleVariableParser extends Parser {
-  private readonly singleVariableParser: SingleVariableParser
+export class TemplateParser extends Parser {
+  private readonly variableParser: VariableParser
 
   constructor (options?: Partial<IParserOptions>) {
     super(options)
-    this.singleVariableParser = new SingleVariableParser({ ...options, returnFirstValueForArraySubField: true })
+    this.variableParser = new VariableParser({ ...options, returnFirstValueForArraySubField: true })
   }
 
   /**
@@ -22,7 +22,7 @@ export class MultipleVariableParser extends Parser {
          */
   parse<T = string>(parsable: string, data: object): T {
     parsable = parsable.replace(this.options.regex as RegExp, (match, placeholder) => {
-      const value = this.singleVariableParser.parse(placeholder, data)
+      const value = this.variableParser.parse(placeholder, data)
       return String(value)
     })
 
@@ -34,7 +34,7 @@ export class MultipleVariableParser extends Parser {
 
     const iterator = parsable.matchAll(this.options.regex as RegExp)
     for (const match of iterator) {
-      const value = this.singleVariableParser.getVariable(match[1])
+      const value = this.variableParser.getVariable(match[1])
       variables.push(value)
     }
 
