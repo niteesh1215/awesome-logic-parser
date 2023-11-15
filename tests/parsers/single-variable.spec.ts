@@ -38,4 +38,14 @@ describe('Single variable Parser', () => {
     const result = parser.parse<any[]>('{name.$.name.$.key}', { name: [{ name: { key: ['John'] } }, { name: { key: ['Jane'] } }] })
     expect(result[0]).toBe('John')
   })
+
+  it('should return variable', () => {
+    const parser = new SingleVariableParser()
+    const result = parser.getVariable('{name}')
+    expect(result.name).toBe('name')
+
+    const result2 = parser.getVariable('{name | toDate:MM-dd-yyyy}')
+    expect(result2.name).toBe('name')
+    expect(result2.pipes).toEqual(['toDate:MM-dd-yyyy'])
+  })
 })

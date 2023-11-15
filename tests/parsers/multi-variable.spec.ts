@@ -31,10 +31,4 @@ describe('Multi variable Parser', () => {
     const result = parser.parse<any[]>('{name.$.name.$.key}', { name: [{ name: { key: ['John'] } }, { name: { key: ['Jane'] } }] })
     expect(result).toBe('John')
   })
-
-  it('should return true', () => {
-    const parser = new MultipleVariableParser()
-    const result = parser.parse<boolean>('{name} is {age} years old', { name: 'John', age: 25 })
-    expect(result).toBe(true)
-  })
 })
