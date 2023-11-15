@@ -1,4 +1,4 @@
-import { type VarPipes } from '../interfaces/common'
+import { type Variable } from '../interfaces/common'
 import { type IParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
 import { SingleVariableParser } from './single-variable'
@@ -29,8 +29,8 @@ export class MultipleVariableParser extends Parser {
     return parsable as T
   }
 
-  getVariablesAndPipes (parsable: string): VarPipes[] {
-    const variables: VarPipes[] = []
+  getVariables (parsable: string): Variable[] {
+    const variables: Variable[] = []
 
     const iterator = parsable.matchAll(this.options.regex as RegExp)
     for (const match of iterator) {

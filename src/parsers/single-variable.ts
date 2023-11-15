@@ -1,7 +1,7 @@
 /* eslint-disable no-new-func */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 
-import { type VarPipes } from '../interfaces/common'
+import { type Variable } from '../interfaces/common'
 import { type ISingleVariableParserOptions } from '../interfaces/parser-options'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
@@ -91,13 +91,13 @@ export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
     return value
   }
 
-  getVariableAndPipes (parsable: string): VarPipes {
+  getVariableAndPipes (parsable: string): Variable {
     parsable = parsable.trim()
     parsable = parsable.replace('{', '').replace('}', '')
 
     const parts = parsable.split('|').map(x => x.trim())
     return {
-      variable: parts[0],
+      name: parts[0],
       pipes: parts.slice(1)
     }
   }
