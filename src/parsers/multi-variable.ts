@@ -34,7 +34,7 @@ export class MultipleVariableParser extends Parser {
 
     const iterator = parsable.matchAll(this.options.regex as RegExp)
     for (const match of iterator) {
-      const value = this.singleVariableParser.getVariableAndPipes(match[1])
+      const value = this.singleVariableParser.getVariable(match[1])
       variables.push(value)
     }
 

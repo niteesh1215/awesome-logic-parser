@@ -91,7 +91,7 @@ export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
     return value
   }
 
-  getVariableAndPipes (parsable: string): Variable {
+  getVariable (parsable: string): Variable {
     parsable = parsable.trim()
     parsable = parsable.replace('{', '').replace('}', '')
 
