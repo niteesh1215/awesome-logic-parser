@@ -8,6 +8,9 @@ import { MultipleVariableParser } from '../parsers/multi-variable'
      * @template U - Type of the right-hand side of the expression.
      */
 export abstract class Expression<T = string, U = any> {
+  public singleVariableParser: SingleVariableParser = new SingleVariableParser()
+  public multipleVariableParser: MultipleVariableParser = new MultipleVariableParser()
+
   public readonly left: T
   public readonly operator: RelationalOperator
   public readonly right: U
@@ -32,14 +35,12 @@ export abstract class Expression<T = string, U = any> {
   abstract parse (data: object): boolean
 
   protected parseLeft (data: object): any {
-    const parser = new SingleVariableParser()
     if (typeof this.left !== 'string') throw new Error('Left side of expression must be a string')
-    return parser.parse(this.left, data)
+    return this.singleVariableParser.parse(this.left, data)
   }
 
   protected parseRight (data: object): any {
-    const parser = new MultipleVariableParser()
     if (typeof this.right !== 'string') throw new Error('Right side of expression must be a string')
-    return parser.parse(this.right as string, data)
+    return this.multipleVariableParser.parse(this.right as string, data)
   }
 }

@@ -37,7 +37,7 @@ const logicGroup = {
     // Relational operators
     {
       type: 'expr',
-      left: '${age}',
+      left: '{age}',
       operator: 'GTE',
       right: minAge
     },
@@ -47,7 +47,7 @@ const logicGroup = {
     },
     {
       type: 'expr',
-      left: '${city}',
+      left: '{city}',
       operator: 'EQ',
       right: targetCity
     },
@@ -57,7 +57,7 @@ const logicGroup = {
     },
     {
       type: 'expr',
-      left: '${name}',
+      left: '{name}',
       operator: 'STARTSWITH',
       right: startsWith
     },
@@ -67,7 +67,7 @@ const logicGroup = {
     },
     {
       type: 'expr',
-      left: '${hobbies}',
+      left: '{hobbies}',
       operator: 'INCLUDES',
       right: hobby
     },
@@ -77,7 +77,7 @@ const logicGroup = {
     },
     {
       type: 'expr',
-      left: '${text}',
+      left: '{text}',
       operator: 'ENDSWITH',
       right: endsWith
     },
@@ -87,7 +87,7 @@ const logicGroup = {
     },
     {
       type: 'expr',
-      left: '${age}',
+      left: '{age}',
       operator: 'BETWEEN',
       right: {
         start: minAge,
@@ -104,7 +104,7 @@ const logicParser = new LogicParser({
 });
 
 // Evaluate the rules
-const result = logicParser.evaluate(logicGroup, data);
+const result = logicParser.parse(logicGroup, data);
 ```
 
 ## License

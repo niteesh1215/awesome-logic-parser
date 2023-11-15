@@ -11,7 +11,7 @@ describe('Logic Parser', () => {
     text: 'Hello, World'
   }
 
-  it('it should return true', () => {
+  it('case 1: it should return true', () => {
     // Define variables for testing
     const minAge = 18
     const maxAge = 30
@@ -27,7 +27,7 @@ describe('Logic Parser', () => {
         // Relational operators
         {
           type: Element.EXPRESSION,
-          left: '${age}',
+          left: '{age}',
           operator: RelationalOperator.GTE,
           right: `${minAge}`
         },
@@ -37,7 +37,7 @@ describe('Logic Parser', () => {
         },
         {
           type: Element.EXPRESSION,
-          left: '${city}',
+          left: '{city}',
           operator: RelationalOperator.EQ,
           right: `${targetCity}`
         },
@@ -47,7 +47,7 @@ describe('Logic Parser', () => {
         },
         {
           type: Element.EXPRESSION,
-          left: '${name}',
+          left: '{name}',
           operator: RelationalOperator.STARTSWITH,
           right: `${startsWith}`
         },
@@ -57,7 +57,7 @@ describe('Logic Parser', () => {
         },
         {
           type: Element.EXPRESSION,
-          left: '${hobbies}',
+          left: '{hobbies}',
           operator: RelationalOperator.INCLUDES,
           right: `${hobby}`
         },
@@ -67,7 +67,7 @@ describe('Logic Parser', () => {
         },
         {
           type: Element.EXPRESSION,
-          left: '${text}',
+          left: '{text}',
           operator: RelationalOperator.ENDSWITH,
           right: `${endsWith}`
         },
@@ -77,12 +77,129 @@ describe('Logic Parser', () => {
         },
         {
           type: Element.EXPRESSION,
-          left: '${age}',
+          left: '{age}',
           operator: RelationalOperator.BETWEEN,
           right: {
             start: `${minAge}`,
             end: `${maxAge}`
           } as any
+        },
+        {
+          type: Element.GROUP,
+          rules: [
+            {
+              type: Element.EXPRESSION,
+              left: '{age}',
+              operator: RelationalOperator.GTE,
+              right: `${minAge}`
+            },
+            {
+              type: Element.LOGIC,
+              operator: LogicalOperator.AND
+            },
+            {
+              type: Element.EXPRESSION,
+              left: '{city}',
+              operator: RelationalOperator.EQ,
+              right: `${targetCity}`
+            },
+            {
+              type: Element.LOGIC,
+              operator: LogicalOperator.AND
+            },
+            {
+              type: Element.EXPRESSION,
+              left: '{name}',
+              operator: RelationalOperator.STARTSWITH,
+              right: `${startsWith}`
+            },
+            {
+              type: Element.LOGIC,
+              operator: LogicalOperator.AND
+            },
+            {
+              type: Element.EXPRESSION,
+              left: '{hobbies}',
+              operator: RelationalOperator.INCLUDES,
+              right: `${hobby}`
+            },
+            {
+              type: Element.LOGIC,
+              operator: LogicalOperator.AND
+            },
+            {
+              type: Element.EXPRESSION,
+              left: '{text}',
+              operator: RelationalOperator.ENDSWITH,
+              right: `${endsWith}`
+            },
+            {
+              type: Element.LOGIC,
+              operator: LogicalOperator.AND
+            },
+            {
+              type: Element.EXPRESSION,
+              left: '{age}',
+              operator: RelationalOperator.BETWEEN,
+              right: {
+                start: `${minAge}`,
+                end: `${maxAge}`
+              } as any
+            }
+          ]
+        }
+      ]
+    }
+
+    const logicParser = new LogicParser({
+      resultWhenEmpty: false,
+      returnFalseWhenError: true
+    })
+
+    const result = logicParser.parse(logicGroup, data)
+    expect(result).toBe(true)
+  })
+
+  it('case 2: it should return true', () => {
+    const logicGroup = {
+      type: 'group',
+      rules: [
+        {
+          type: 'expr',
+          left: '{body.$.Is_enabled}',
+          operator: 'EQ',
+          right: 'true'
+        },
+        {
+          type: 'logic',
+          operator: 'OR'
+        },
+        {
+          type: 'expr',
+          left: '{body.$.Phone}',
+          operator: 'LTE',
+          right: '917011396497'
+        },
+        {
+          type: 'logic',
+          operator: 'OR'
+        },
+        {
+          type: 'expr',
+          left: '{body.$.Place}',
+          operator: 'INCLUDES',
+          right: 'L'
+        }
+      ]
+    } as any
+
+    const data = {
+      body: [
+        {
+          Is_enabled: true,
+          Place: 'Lucknow',
+          Phone: 917011396497,
+          Status: 'Complicated'
         }
       ]
     }

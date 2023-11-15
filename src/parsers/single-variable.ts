@@ -1,6 +1,7 @@
 /* eslint-disable no-new-func */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 
+import { type ISingleVariableParserOptions } from '../interfaces/parser-options'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
 import Parser from './parser'
@@ -8,19 +9,7 @@ import Parser from './parser'
 /**
  * Parses a single variable from a string expression using data as context.
  */
-export class SingleVariableParser extends Parser {
-  private readonly options: { returnFirstValueForArraySubField: boolean }
-
-  /**
-         * Creates a new instance of the SingleVariableParser class.
-         * @param options - The options for the parser.
-         */
-
-  constructor (options?: { returnFirstValueForArraySubField: boolean }) {
-    super()
-    this.options = options ?? { returnFirstValueForArraySubField: false }
-  }
-
+export class SingleVariableParser extends Parser<ISingleVariableParserOptions> {
   /**
          * Parses the specified parsable expression and returns the result.
          * @param parsable - The expression to parse.
@@ -29,7 +18,7 @@ export class SingleVariableParser extends Parser {
          */
   parse<T = any>(parsable: string, data: object): T {
     parsable = parsable.trim()
-    parsable = parsable.replace('${', '').replace('}', '')
+    parsable = parsable.replace('{', '').replace('}', '')
 
     const [key, ...pipes] = parsable.split('|').map(x => x.trim())
 

@@ -11,27 +11,36 @@ import { LessThanOrEqualExpression } from '../expressions/less-than-or-equal'
 import { NotEqualExpression } from '../expressions/not-equal'
 import { NotIncludesExpression } from '../expressions/not-includes'
 import { StartsWithExpression } from '../expressions/starts-with'
-import { type IBetween, type IExpression, type ILogic, type ILogicGroup, type ILogicParserOptions } from '../interfaces/common'
+import { type IBetween, type IExpression, type ILogic, type ILogicGroup } from '../interfaces/common'
+import { type ILogicParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
+import { MultipleVariableParser, SingleVariableParser } from '..'
 
 /**
      * Parses rule expressions based on a set of rules and data context.
      * @throws Error if an error occurs during parsing.
      */
-export class LogicParser extends Parser {
-  private readonly options: ILogicParserOptions
+export class LogicParser extends Parser<ILogicParserOptions> {
+  private readonly singleVariableParser: SingleVariableParser
+  private readonly multipleVariableParser: MultipleVariableParser
 
-  /**
-         * Creates an instance of LogicParser with optional parsing options.
-         * @param options - Parsing options for the rule parser.
-         */
-  constructor (options?: ILogicParserOptions) {
-    super()
-    this.options = options ?? {
+  constructor (options?: Partial<ILogicParserOptions>) {
+    options = Object.assign({
       resultWhenEmpty: false,
       returnFalseWhenError: false
-    }
+    }, options ?? {})
+
+    super(options as ILogicParserOptions)
+    this.singleVariableParser = new SingleVariableParser(this.options)
+    this.multipleVariableParser = new MultipleVariableParser(this.options)
   }
+
+  /**
+         * Parses the specified parsable expression and returns the result.
+         * @param parsable - The expression to parse.
+         * @param data - The data object to use as context.
+         * @returns The parsed value.
+         */
 
   parse<T = boolean>(parsable: ILogicGroup | IExpression, data: object): T {
     return (parsable.type === Element.GROUP)
@@ -68,7 +77,12 @@ export class LogicParser extends Parser {
 
   private parseExpression (expr: IExpression, data: object): boolean {
     try {
-      return this.getExpression(expr).parse(data)
+      const expression = this.getExpression(expr)
+
+      expression.singleVariableParser = this.singleVariableParser
+      expression.multipleVariableParser = this.multipleVariableParser
+
+      return expression.parse(data)
     } catch (e) {
       if (this.options.returnFalseWhenError) return false
       throw e

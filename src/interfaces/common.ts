@@ -33,11 +33,3 @@ export interface ILogic {
   type: Element.LOGIC
   operator: 'AND' | 'OR'
 }
-
-/**
-     * Options for the LogicParser class.
-     */
-export interface ILogicParserOptions {
-  resultWhenEmpty: boolean
-  returnFalseWhenError?: boolean
-}
