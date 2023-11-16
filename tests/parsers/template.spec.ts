@@ -31,4 +31,13 @@ describe('Multi variable Parser', () => {
     const result = parser.parse<any[]>('{name.$.name.$.key}', { name: [{ name: { key: ['John'] } }, { name: { key: ['Jane'] } }] })
     expect(result).toBe('John')
   })
+
+  it('it should extract variables', () => {
+    const parser = new TemplateParser()
+    const result = parser.getVariables('{name} {dob | toDate:MM-dd-yyyy | toDate:MMM dd, yyyy hh:mm:ss a}')
+
+    console.log(result)
+
+    expect(result).toEqual([{ key: 'name', pipes: [] }, { key: 'dob', pipes: ['toDate:MM-dd-yyyy', 'toDate:MMM dd, yyyy hh:mm:ss a'] }])
+  })
 })
