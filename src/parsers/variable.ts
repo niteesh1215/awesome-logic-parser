@@ -1,7 +1,7 @@
 /* eslint-disable no-new-func */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 
-import { type Variable } from '../interfaces/common'
+import { type IPipe, type IVariable } from '../interfaces/common'
 import { type IVariableParserOptions } from '../interfaces/parser-options'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
@@ -27,12 +27,9 @@ export class VariableParser extends Parser<IVariableParserOptions> {
     return variable.pipes.reduce((acc, pipe) => this.applyPipe(acc, pipe), value)
   }
 
-  private applyPipe (value: string, pipe: string): any {
-    pipe = pipe.trim()
-    const [name, ...formatStrArr] = pipe.split(':')
-    const formatStr = formatStrArr.join(':')
-    const pipeInstance = this.getPipe(name)
-    return pipeInstance.transform(value, formatStr)
+  private applyPipe (value: string, pipe: IPipe): any {
+    const pipeInstance = this.getPipe(pipe.name)
+    return pipeInstance.transform(value, pipe.input)
   }
 
   private getPipe (name: string): Pipe {
@@ -86,15 +83,20 @@ export class VariableParser extends Parser<IVariableParserOptions> {
     return value
   }
 
-  getVariable (parsable: string): Variable {
+  getVariable (parsable: string): IVariable {
     parsable = parsable.trim()
 
-    const extract = (str: string): Variable => {
+    const extract = (str: string): IVariable => {
       const parts = str.split('|').map(x => x.trim())
-      return {
-        key: parts[0],
-        pipes: parts.slice(1)
-      }
+      const key = parts[0]
+      const pipes = parts.slice(1).map<IPipe>(x => {
+        const [name, ...rest] = x.split(':')
+        return {
+          name,
+          input: rest.join(':')
+        }
+      })
+      return { key, pipes }
     }
 
     const iterator = parsable.matchAll(this.options.regex as RegExp)

@@ -1,4 +1,4 @@
-import { type Variable } from '../interfaces/common'
+import { type IVariable } from '../interfaces/common'
 import { type IParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
 import { VariableParser } from './variable'
@@ -29,8 +29,8 @@ export class TemplateParser extends Parser {
     return parsable as T
   }
 
-  getVariables (parsable: string): Variable[] {
-    const variables: Variable[] = []
+  getVariables (parsable: string): IVariable[] {
+    const variables: IVariable[] = []
 
     const iterator = parsable.matchAll(this.options.regex as RegExp)
     for (const match of iterator) {

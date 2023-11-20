@@ -35,9 +35,6 @@ describe('Multi variable Parser', () => {
   it('it should extract variables', () => {
     const parser = new TemplateParser()
     const result = parser.getVariables('{name} {dob | toDate:MM-dd-yyyy | toDate:MMM dd, yyyy hh:mm:ss a}')
-
-    console.log(result)
-
-    expect(result).toEqual([{ key: 'name', pipes: [] }, { key: 'dob', pipes: ['toDate:MM-dd-yyyy', 'toDate:MMM dd, yyyy hh:mm:ss a'] }])
+    expect(result).toEqual([{ key: 'name', pipes: [] }, { key: 'dob', pipes: [{ name: 'toDate', input: 'MM-dd-yyyy' }, { name: 'toDate', input: 'MMM dd, yyyy hh:mm:ss a' }] }])
   })
 })

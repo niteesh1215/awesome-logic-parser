@@ -1,6 +1,9 @@
 
 /**
-     * Options for the Parser class.
+     * The options for the Parser class.
+     * regex: The regular expression to use for parsing.
+     * Parses variables in the format of `{variable}` by default.
+     * Defaults to `/\{(.*?)\}/g`.
      */
 export interface IParserOptions {
   regex?: RegExp
