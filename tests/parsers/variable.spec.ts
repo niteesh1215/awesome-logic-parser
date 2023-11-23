@@ -47,4 +47,22 @@ describe('Single variable Parser', () => {
     const result2 = parser.getVariable('{name | toDate:MM-dd-yyyy}')
     expect(result2).toEqual({ key: 'name', pipes: [{ name: 'toDate', input: 'MM-dd-yyyy' }] })
   })
+
+  it('should parse a iso date pipe', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<Date>('{date | toDate:ISO}', { date: '2023-10-25T02:30:00.000Z' })
+    expect(result.toISOString()).toBe('2023-10-25T02:30:00.000Z')
+  })
+
+  it('should parse a epoch seconds date pipe', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<Date>('{date | toDate:EPOCH_SECONDS}', { date: '1672530600' })
+    expect(result.toISOString()).toBe('2022-12-31T23:50:00.000Z')
+  })
+
+  it('should parse a epoch milliseconds date pipe', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<Date>('{date | toDate:EPOCH_MILLISECONDS}', { date: '1672530600000' })
+    expect(result.toISOString()).toBe('2022-12-31T23:50:00.000Z')
+  })
 })
