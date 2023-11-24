@@ -20,11 +20,15 @@ export class VariableParser extends Parser<IVariableParserOptions> {
   parse<T = any>(parsable: string, data: object): T {
     const variable = this.getVariable(parsable)
     const result = this.extractValueFromKey(variable.key, data)
-    const value = this.options.returnFirstValueForArraySubField && Array.isArray(result)
+    const value = Array.isArray(result) && this.shouldReturnFirstValueForArraySubField(variable.key)
       ? result[0]
       : result
 
     return variable.pipes.reduce((acc, pipe) => this.applyPipe(acc, pipe), value)
+  }
+
+  private shouldReturnFirstValueForArraySubField (key: string): boolean {
+    return key.includes('.$.') && !!this.options.returnFirstValueForArraySubField
   }
 
   private applyPipe (value: string, pipe: IPipe): any {
