@@ -13,7 +13,13 @@ export interface IParserOptions {
      * Options for the LogicParser class.
      */
 export interface ILogicParserOptions extends IParserOptions {
+  /**
+   * The result to return when the expression is empty.
+   */
   resultWhenEmpty: boolean
+  /**
+   * If true, the parser will return false when an error occurs.
+   */
   returnFalseWhenError: boolean
 }
 
@@ -22,4 +28,12 @@ export interface ILogicParserOptions extends IParserOptions {
      */
 export interface IVariableParserOptions extends IParserOptions {
   returnFirstValueForArraySubField?: boolean
+}
+
+/**
+ * Options for the TemplateParser class.
+ */
+
+export interface ITemplateParserOptions extends IParserOptions {
+  stringifier?: (value: any) => string
 }

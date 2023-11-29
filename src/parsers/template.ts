@@ -1,15 +1,15 @@
 import { type IVariable } from '../interfaces/common'
-import { type IParserOptions } from '../interfaces/parser-options'
+import { type ITemplateParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
 import { VariableParser } from './variable'
 
 /**
      * Parses template string using data as context.
      */
-export class TemplateParser extends Parser {
+export class TemplateParser extends Parser<ITemplateParserOptions> {
   private readonly variableParser: VariableParser
 
-  constructor (options?: Partial<IParserOptions>) {
+  constructor (options?: ITemplateParserOptions) {
     super(options)
     this.variableParser = new VariableParser({ ...options, returnFirstValueForArraySubField: true })
   }
@@ -23,7 +23,7 @@ export class TemplateParser extends Parser {
   parse<T = string>(parsable: string, data: object): T {
     parsable = parsable.replace(this.options.regex as RegExp, (match, placeholder) => {
       const value = this.variableParser.parse(placeholder, data)
-      return String(value)
+      return this.options?.stringifier ? this.options.stringifier(value) : String(value)
     })
 
     return parsable as T
