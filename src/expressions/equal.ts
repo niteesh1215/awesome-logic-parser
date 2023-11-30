@@ -26,6 +26,11 @@ export class EqualExpression extends Expression {
         return this.validate(e, right)
       })
     }
+
+    switch (typeof left) {
+      case 'boolean': right = right === 'true'; break
+    }
+
     // eslint-disable-next-line eqeqeq
     return left == right
   }
