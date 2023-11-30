@@ -21,16 +21,12 @@ export class BetweenExpression extends Expression<string, IBetween> {
     const between: IBetween = this.right as unknown as IBetween
     const start = this.templateParser.parse(String(between.start), data)
     const end = this.templateParser.parse(String(between.end), data)
+    this.isLeftSubArray = this.variableParser.isSubArrayVariable(this.left)
 
-    return this.validate(left, start, end)
+    return this.handleSubArrayValidation(left, start, end)
   }
 
-  private validate (left: any, start: any, end: any): boolean {
-    if (Array.isArray(left)) {
-      return left.some((e) => {
-        return this.validate(e, start, end)
-      })
-    }
+  protected validate (left: any, start: any, end: any): boolean {
     switch (typeof left) {
       case 'number':
         return left >= Number(start) && left <= Number(end)

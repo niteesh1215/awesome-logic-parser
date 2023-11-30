@@ -18,4 +18,8 @@ export class NotEqualExpression extends Expression {
   parse (data: object): boolean {
     return !new EqualExpression(this.left, this.right).parse(data)
   }
+
+  protected validate (...args: any[]): boolean {
+    return false
+  }
 }

@@ -28,7 +28,11 @@ export class VariableParser extends Parser<IVariableParserOptions> {
   }
 
   private shouldReturnFirstValueForArraySubField (key: string): boolean {
-    return key.includes('.$.') && !!this.options.returnFirstValueForArraySubField
+    return this.isSubArrayVariable(key) && !!this.options.returnFirstValueForArraySubField
+  }
+
+  public isSubArrayVariable (parsable: string): boolean {
+    return parsable.includes('.$.')
   }
 
   private applyPipe (value: string, pipe: IPipe): any {

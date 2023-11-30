@@ -21,13 +21,7 @@ export class StartsWithExpression extends Expression {
     return this.validate(left, right)
   }
 
-  private validate (left: any, right: any): boolean {
-    if (Array.isArray(left)) {
-      return left.some((e) => {
-        return this.validate(e, right)
-      })
-    }
-
+  protected validate (left: any, right: any): boolean {
     switch (typeof left) {
       case 'string':
         return left.startsWith(right)

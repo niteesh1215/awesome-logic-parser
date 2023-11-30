@@ -1,4 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
+import { VariableParser } from '../../src'
 import { BetweenExpression } from '../../src/expressions/between'
 
 describe('BetweenExpression', () => {
@@ -19,8 +20,11 @@ describe('BetweenExpression', () => {
 
   it('should return false for array of objects', () => {
     const data = { start: 1, end: 10 }
-    const expression = new BetweenExpression('{arr.$.value}', data as any)
+    const left = '{arr.$.value}'
+    const expression = new BetweenExpression(left, data as any)
     const result = expression.parse({ arr: [{ value: 15 }, { value: 15 }] })
+    const variable = new VariableParser().parse(left, { arr: [{ value: 15 }, { value: 15 }] })
+    expect(variable).toEqual([15, 15])
     expect(result).toBe(false)
   })
 })
