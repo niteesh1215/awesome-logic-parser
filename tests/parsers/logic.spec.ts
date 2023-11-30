@@ -166,9 +166,9 @@ describe('Logic Parser', () => {
       rules: [
         {
           type: 'expr',
-          left: '{body.code}',
-          operator: 'INCLUDES',
-          right: '91'
+          left: '{body.$.Present-in-office}',
+          operator: 'EQ',
+          right: 'false'
         },
         {
           type: 'logic',
@@ -176,26 +176,36 @@ describe('Logic Parser', () => {
         },
         {
           type: 'expr',
-          left: '{body.Present-in-office}',
-          operator: 'EQ',
-          right: 'true'
+          left: '{body.$.code}',
+          operator: 'NEQ',
+          right: '97'
+        },
+        {
+          type: 'logic',
+          operator: 'AND'
+        },
+        {
+          type: 'expr',
+          left: '{body.$.Home}',
+          operator: 'INCLUDES',
+          right: 'Lu'
         }
       ]
     } as any
 
     const data = {
-      body: {
+      body: [{
         Home: 'Lucknow',
         State: 'UP',
         code: '+91',
         Phone1: 7011396497,
         Phone2: 9560586555,
-        Position: 'CEO',
-        'Present-in-office': true,
+        Position: 'test@yopmail.com',
+        'Present-in-office': false,
         time: '2023-11-23T07:23:13.244Z',
-        final: 'search?q=eugenie+bouchard&sca_esv=586549689&rlz=1C1CHBF_enIN1037IN1037&ei=tTJoZf2fEoDc2roP74yJ8AU&gs_ssp=eJzj4tLP1TdIKTa1yCsxYPQSSC1NT83LTFVIyi9NzkgsSgEAkJMKCw&oq=eugine&gs_lp=Egxnd3Mtd2l6LXNlcnAiBmV1Z2luZSoCCAIyBRAAGIAEMgcQABiABBgKMgcQLhiABBgKMg0QLhiABBjHARivARgKMgcQABiABBgKMgcQLhiABBgKMgcQLhiABBgKMgcQABiABBgKMgcQLhiABBgKMg0QLhiABBjHARjRAxgKMhYQLhiABBgKGJcFGNwEGN4EGN8E2AEDSOQvUMMFWKwecAJ4AZABBJgBxwKgAf8TqgEHMC4yLjguMbgBAcgBAPgBAagCFMICChAAGEcY1gQYsAPCAg0QABiABBiKBRiwAxhDwgIREAAYgAQYigUYkQIYsQMYgwHCAgsQABiABBiKBRiRAsICDhAAGIAEGIoFGJECGLEDwgIIEAAYgAQYsQPCAgsQABiABBixAxiDAcICExAAGIAEGIoFGOoCGLQCGEPYAQHCAhYQABgDGI8BGOUCGOoCGLQCGIwD2AECwgIWEC4YAxiPARjlAhjqAhi0AhiMA9gBAsICDhAAGIAEGIoFGLEDGIMBwgIFEC4YgATCAhAQABiABBiKBRixAxiDARhDwgIKEAAYgAQYigUYQ8ICEBAuGIAEGIoFGLEDGIMBGEPCAhAQLhiABBiKBRjHARjRAxhDwgINEAAYgAQYigUYsQMYQ8ICEBAuGIAEGIoFGLEDGNQCGEPCAg0QLhiABBiKBRixAxhDwgIKEC4YgAQYigUYQ8ICHxAuGIAEGIoFGLEDGNQCGEMYlwUY3AQY3gQY4ATYAQPCAgsQLhivARjHARiABMICGhAuGK8BGMcBGIAEGJcFGNwEGN4EGOAE2AED4gMEGAAgQYgGAZAGCroGBAgBGAe6BgYIAhABGAq6BgYIAxABGBQ&sclient=gws-wiz-serp',
+        final: 'prateek.pandey@yopmail.com',
         media_url: 'https://cdn.pixabay.com/photo/2015/12/11/09/30/mobile-phone-1087845_1280.jpg'
-      }
+      }]
     }
 
     const logicParser = new LogicParser({
