@@ -195,15 +195,15 @@ describe('Logic Parser', () => {
 
     const data = {
       body: [{
-        Home: 'Lucknow',
-        State: 'UP',
+        Home: 'Goa',
+        State: 'Goa',
         code: '+91',
-        Phone1: 7011396497,
-        Phone2: 9560586555,
+        Phone1: 8802000202,
+        Phone2: 8038439884,
         Position: 'test@yopmail.com',
         'Present-in-office': false,
         time: '2023-11-23T07:23:13.244Z',
-        final: 'prateek.pandey@yopmail.com',
+        final: 'example@yopmail.com',
         media_url: 'https://cdn.pixabay.com/photo/2015/12/11/09/30/mobile-phone-1087845_1280.jpg'
       }]
     }
