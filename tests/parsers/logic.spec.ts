@@ -188,7 +188,7 @@ describe('Logic Parser', () => {
           type: 'expr',
           left: '{body.$.Home}',
           operator: 'INCLUDES',
-          right: 'Lu'
+          right: 'Go'
         }
       ]
     } as any
