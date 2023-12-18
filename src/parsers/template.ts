@@ -23,7 +23,11 @@ export class TemplateParser extends Parser<ITemplateParserOptions> {
   parse<T = string>(parsable: string, data: object): T {
     parsable = parsable.replace(this.options.regex as RegExp, (match, placeholder) => {
       const value = this.variableParser.parse(placeholder, data)
-      return this.options?.stringifier ? this.options.stringifier(value) : String(value)
+      return this.options?.stringifier
+        ? this.options.stringifier(value)
+        : this.options.keepParameterWhenUndefined
+          ? match
+          : String(value)
     })
 
     return parsable as T
