@@ -35,5 +35,5 @@ export interface IVariableParserOptions extends IParserOptions {
  */
 
 export interface ITemplateParserOptions extends IParserOptions {
-  stringifier?: (value: any) => string
+  stringifier?: (value: any, match: string) => string
 }
