@@ -36,5 +36,4 @@ export interface IVariableParserOptions extends IParserOptions {
 
 export interface ITemplateParserOptions extends IParserOptions {
   stringifier?: (value: any) => string
-  keepParameterWhenUndefined?: boolean
 }
