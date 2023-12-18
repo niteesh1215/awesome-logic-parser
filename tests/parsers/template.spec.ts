@@ -33,6 +33,19 @@ describe('Multi variable Parser', () => {
     expect(result).toBe('John is 2023-10-25T09:00:00.000Z years old')
   })
 
+  it('should parse a multi variable with a date and time pipe with a strigifier and match', () => {
+    const parser = new TemplateParser({
+      stringifier: (value: Date, match) => {
+        if (value instanceof Date) {
+          return value.toISOString()
+        }
+        return value || match
+      }
+    })
+    const result = parser.parse<Date>('{name} is {age} {name} years old', { name: 'John' })
+    expect(result).toBe('John is {age} John years old')
+  })
+
   it('should handle array of objects of array of objects', () => {
     const parser = new TemplateParser()
     const result = parser.parse('{name.$.name.$.key}', { name: [{ name: { key: 'John' } }, { name: { key: 'Jane' } }] })
