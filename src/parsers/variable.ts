@@ -75,9 +75,6 @@ export class VariableParser extends Parser<IVariableParserOptions> {
           })
           value = tempObject
         }
-      } else if (Array.isArray(value)) {
-        // If the key part is not "$" but the value is an array, return the array
-        return value
       } else {
         value = value[k] // Navigate deeper into the object
       }
