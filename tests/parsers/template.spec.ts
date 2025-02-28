@@ -63,4 +63,34 @@ describe('Multi variable Parser', () => {
     const result = parser.getVariables('{name} {dob | toDate:MM-dd-yyyy | toDate:MMM dd, yyyy hh:mm:ss a}')
     expect(result).toEqual([{ key: 'name', pipes: [] }, { key: 'dob', pipes: [{ name: 'toDate', input: 'MM-dd-yyyy' }, { name: 'toDate', input: 'MMM dd, yyyy hh:mm:ss a' }] }])
   })
+
+  it('should parse a variable with a fallback pipe', () => {
+    const parser = new TemplateParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'}', { age: 25 })
+    expect(result).toBe('Unknown')
+  })
+
+  it('should parse a variable with a fallback pipe and existing value', () => {
+    const parser = new TemplateParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'}', { name: 'John' })
+    expect(result).toBe('John')
+  })
+
+  it('should parse multiple variables with fallback pipes', () => {
+    const parser = new TemplateParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'} is {age | fallbackValue:\'0\'} years old', { age: 25 })
+    expect(result).toBe('Unknown is 25 years old')
+  })
+
+  it('should parse multiple variables with fallback pipes and existing values', () => {
+    const parser = new TemplateParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'} is {age | fallbackValue:\'0\'} years old', { name: 'John', age: 25 })
+    expect(result).toBe('John is 25 years old')
+  })
+
+  it('should parse a variable with a fallback pipe and a date pipe', () => {
+    const parser = new TemplateParser()
+    const result = parser.parse<Date>('{name | fallbackValue:\'Unknown\'} is {age | toDate:\'MM-dd-yyyy\' | fallbackValue:\'Unknown\'} years old', { name: 'John', age: '10-25-2023' })
+    expect(result).toBe('John is Wed Oct 25 2023 00:00:00 GMT+0530 (India Standard Time) years old')
+  })
 })

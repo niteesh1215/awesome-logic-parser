@@ -65,4 +65,34 @@ describe('Single variable Parser', () => {
     const result = parser.parse<Date>('{date | toDate:EPOCH_MILLISECONDS}', { date: '1672530600000' })
     expect(result.toISOString()).toBe('2022-12-31T23:50:00.000Z')
   })
+
+  it('should parse a single variable with a fallback pipe', () => {
+    const parser = new VariableParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'}', { name: undefined })
+    expect(result).toBe('Unknown')
+  })
+
+  it('should parse a single variable with a fallback pipe when value is null', () => {
+    const parser = new VariableParser()
+    const result = parser.parse('{name | fallbackValue:\'Niteesh\'}', { name: null })
+    expect(result).toBe('Niteesh')
+  })
+
+  it('should parse a single variable with a fallback pipe when value is empty string', () => {
+    const parser = new VariableParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'}', { name: '' })
+    expect(result).toBe('')
+  })
+
+  it('should parse a single variable with a fallback pipe when value is present', () => {
+    const parser = new VariableParser()
+    const result = parser.parse('{name | fallbackValue:\'Unknown\'}', { name: 'John' })
+    expect(result).toBe('John')
+  })
+
+  it('should parse a single variable with multiple pipes including fallback', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<Date>('{name | toDate:MM-dd-yyyy | fallbackValue:\'Unknown\'}', { name: '10-25-2023' })
+    expect(result.toISOString()).toBe('2023-10-24T18:30:00.000Z')
+  })
 })
