@@ -3,6 +3,7 @@
 
 import { type IPipe, type IVariable } from '../interfaces/common'
 import { type IVariableParserOptions } from '../interfaces/parser-options'
+import FallbackValue from '../pipes/fallback'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
 import Parser from './parser'
@@ -43,6 +44,7 @@ export class VariableParser extends Parser<IVariableParserOptions> {
   private getPipe (name: string): Pipe {
     switch (name) {
       case 'toDate': return new ToDatePipe()
+      case 'fallbackValue': return new FallbackValue()
       default: throw new Error(`Pipe ${name} not found`)
     }
   }
@@ -96,9 +98,13 @@ export class VariableParser extends Parser<IVariableParserOptions> {
       const key = parts[0]
       const pipes = parts.slice(1).map<IPipe>(x => {
         const [name, ...rest] = x.split(':')
+        let formattedInput = rest.join(':').trim()
+        if (formattedInput.startsWith('\'') && formattedInput.endsWith('\'')) {
+          formattedInput = formattedInput.slice(1, -1)
+        }
         return {
           name,
-          input: rest.join(':')
+          input: formattedInput
         }
       })
       return { key, pipes }
