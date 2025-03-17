@@ -95,4 +95,28 @@ describe('Single variable Parser', () => {
     const result = parser.parse<Date>('{name | toDate:MM-dd-yyyy | fallbackValue:\'Unknown\'}', { name: '10-25-2023' })
     expect(result.toISOString()).toBe('2023-10-24T18:30:00.000Z')
   })
+
+  it('should parse a single variable with a type casting pipe to number', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<number>('{name | toNumber}', { name: '123' })
+    expect(result).toBe(123)
+  })
+
+  it('should parse a single variable with a type casting pipe to boolean', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<boolean>('{name | toBoolean}', { name: 'true' })
+    expect(result).toBe(true)
+  })
+
+  it('should parse a single variable with a type casting pipe to string', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<string>('{name | toString}', { name: 123 })
+    expect(result).toBe('123')
+  })
+
+  it('should parse a single variable with a type casting pipe to array', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<string[]>('{name | split:\',\'}', { name: '123,456' })
+    expect(result).toEqual(['123', '456'])
+  })
 })
