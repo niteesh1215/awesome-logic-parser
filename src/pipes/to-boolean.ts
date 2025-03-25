@@ -8,9 +8,13 @@ import { Pipe } from './pipe'
 export default class ToBooleanPipe extends Pipe {
   transform (value: unknown, formatStr: string): boolean {
     if (!value) return false
-    else if (typeof value === 'number') return !!value
-    // Check if value is an object or array
-    else if (Object.prototype.toString.call(value) === '[object Object]' || Object.prototype.toString.call(value) === '[object Array]') return false
+    if (typeof value === 'boolean') return value
+    if (typeof value === 'number') return value !== 0
+    if (value === 'true') return true
+    if (value === 'false') return false
+
+    if (value && typeof value === 'object') return false
+
     return !!String(value).trim()
   }
 }

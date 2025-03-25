@@ -8,7 +8,7 @@ import { Pipe } from './pipe'
 export default class ToNumberPipe extends Pipe {
   // formatStr can be anything in future like fixed point length in case of floating numbers
   transform (value: unknown, formatStr: string): number {
-    if (!Number(value)) throw new Error('Not a valid number')
+    if (Number.isNaN(Number(value))) throw new Error('Not a valid number')
     return Number(value)
   }
 }

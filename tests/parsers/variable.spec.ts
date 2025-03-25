@@ -102,10 +102,16 @@ describe('Single variable Parser', () => {
     expect(result).toBe(123)
   })
 
-  it('should parse a single variable with a type casting pipe to boolean', () => {
+  it('should parse a single true variable with a type casting pipe to boolean', () => {
     const parser = new VariableParser()
     const result = parser.parse<boolean>('{name | toBoolean}', { name: 'true' })
     expect(result).toBe(true)
+  })
+
+  it('should parse a single false variable with a type casting pipe to boolean', () => {
+    const parser = new VariableParser()
+    const result = parser.parse<boolean>('{name | toBoolean}', { name: 'false' })
+    expect(result).toBe(false)
   })
 
   it('should parse a single variable with a type casting pipe to string', () => {
