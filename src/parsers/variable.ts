@@ -6,7 +6,11 @@ import { type IVariableParserOptions } from '../interfaces/parser-options'
 import FallbackValue from '../pipes/fallback'
 import { type Pipe } from '../pipes/pipe'
 import ToDatePipe from '../pipes/to-date'
+import ToNumberPipe from '../pipes/to-number'
+import ToStringPipe from '../pipes/to-string'
+import ToBooleanPipe from '../pipes/to-boolean'
 import Parser from './parser'
+import SplitPipe from '../pipes/split'
 
 /**
  * Parses a single variable from a string expression using data as context.
@@ -44,6 +48,10 @@ export class VariableParser extends Parser<IVariableParserOptions> {
   private getPipe (name: string): Pipe {
     switch (name) {
       case 'toDate': return new ToDatePipe()
+      case 'toNumber': return new ToNumberPipe()
+      case 'toString': return new ToStringPipe()
+      case 'toBoolean': return new ToBooleanPipe()
+      case 'split': return new SplitPipe()
       case 'fallbackValue': return new FallbackValue()
       default: throw new Error(`Pipe ${name} not found`)
     }
