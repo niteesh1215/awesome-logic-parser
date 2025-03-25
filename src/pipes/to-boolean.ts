@@ -13,8 +13,6 @@ export default class ToBooleanPipe extends Pipe {
     if (value === 'true') return true
     if (value === 'false') return false
 
-    if (value && typeof value === 'object') return false
-
-    return !!String(value).trim()
+    return !!String(value)
   }
 }

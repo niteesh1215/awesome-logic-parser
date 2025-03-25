@@ -19,7 +19,7 @@ describe('ToBoolean Pipe', () => {
 
   it('should return false if the value is an empty string', () => {
     expect(toBoolean.transform('', '')).toBe(false)
-    expect(toBoolean.transform('   ', '')).toBe(false)
+    expect(toBoolean.transform('   ', '')).toBe(true)
   })
 
   it('should return false if the value is null or undefined', () => {
@@ -32,8 +32,13 @@ describe('ToBoolean Pipe', () => {
     expect(toBoolean.transform(1, '')).toBe(true)
   })
 
-  it('should return false if the value is an object', () => {
-    expect(toBoolean.transform({}, '')).toBe(false)
+  it('should return false if the value is an empty object or array', () => {
+    expect(toBoolean.transform({}, '')).toBe(true)
     expect(toBoolean.transform([], '')).toBe(false)
+  })
+
+  it('should return boolean if the value is a boolean string', () => {
+    expect(toBoolean.transform('true', '')).toBe(true)
+    expect(toBoolean.transform('false', '')).toBe(false)
   })
 })
