@@ -12,6 +12,7 @@ export const enum RelationalOperator {
   INCLUDES = 'INCLUDES',
   NOT_INCLUDES = 'NOT_INCLUDES',
   BETWEEN = 'BETWEEN',
+  IS_EMPTY = 'IS_EMPTY',
   ENDSWITH = 'ENDSWITH'
 }
 
