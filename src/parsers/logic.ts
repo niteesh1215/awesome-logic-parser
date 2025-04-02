@@ -16,7 +16,6 @@ import { type ILogicParserOptions } from '../interfaces/parser-options'
 import Parser from './parser'
 import { TemplateParser, VariableParser } from '..'
 import { IsEmptyExpression } from '../expressions/is-empty'
-import { IsNotEmptyExpression } from '../expressions/is-not-empty'
 
 /**
      * Parses rule expressions based on a set of rules and data context.
