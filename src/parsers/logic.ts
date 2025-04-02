@@ -116,8 +116,6 @@ export class LogicParser extends Parser<ILogicParserOptions> {
         return new NotIncludesExpression(left, String(right))
       case RelationalOperator.IS_EMPTY:
         return new IsEmptyExpression(left, String(right))
-      case RelationalOperator.IS_NOT_EMPTY:
-        return new IsNotEmptyExpression(left, String(right))
       case RelationalOperator.BETWEEN:
         return new BetweenExpression(left, right as unknown as IBetween)
       default:
