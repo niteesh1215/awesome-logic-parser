@@ -10,10 +10,15 @@ export class IsEmptyExpression extends Expression {
   }
 
   protected validate (left: any[], right: any): boolean {
-    // Check if incoming left is an array or not
-    if (!Array.isArray(left)) return false
+    switch (typeof left) {
+      case 'string':
+        if (right && right === 'true') return (left as string).length === 0
+        break
+      default: {
+        if (Array.isArray(left) && right && right === 'true') return left.length === 0
+      }
+    }
 
-    if (right && right === 'true') return left.length === 0
     return false
   }
 }
