@@ -9,14 +9,15 @@ export class IsEmptyExpression extends Expression {
     super(left, RelationalOperator.IS_EMPTY, right)
   }
 
-  protected validate (left: any[], right: any): boolean {
-    switch (typeof left) {
-      case 'string':
-        if (right && right === 'true') return (left as string).length === 0
-        break
-      default: {
-        if (Array.isArray(left) && right && right === 'true') return left.length === 0
-      }
+  protected validate (left: any, right: any): boolean {
+    const isRightTruthy = right === 'true'
+
+    if (typeof left === 'string') {
+      return (left.length === 0) === isRightTruthy
+    }
+
+    if (Array.isArray(left)) {
+      return (left.length === 0) === isRightTruthy
     }
 
     return false

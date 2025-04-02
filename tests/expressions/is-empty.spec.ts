@@ -9,6 +9,12 @@ describe('IsEmptyExpression', () => {
       result: true
     },
     {
+      description: 'should validate an empty array',
+      value: [],
+      right: 'false',
+      result: false
+    },
+    {
       description: 'should validate an empty string',
       value: '',
       right: 'true',
